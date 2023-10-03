@@ -1,7 +1,5 @@
 import logging
-import os
 from shazamio import Shazam
-import io
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import (
     ApplicationBuilder,
@@ -29,16 +27,7 @@ logger.setLevel(logging.INFO)
 shazam = Shazam()
 
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user = update.effective_user
-    user_id = user.id
-    username = user.username
-    first_name = user.first_name
-
-    # Store user information in a file
-    data = f"User ID: {user_id}, Username: {username}\n"
-    print(data)
-
+async def start(update, context):
     # Send Welcome message
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
@@ -47,17 +36,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "Just send me a voice message or an audio file and I will try to find the song for you."
         ),
     )
-    try:
-        print("Before file writing")
-        with open("user_list.txt", "a", encoding="utf-8") as file:
-            file.write("data \n")
-            file.flush()
-        print("After file writing")
-
-    except Exception as e:
-        logger.error(e)
-        print(f"An error occurred while writing to the file: {e}")
-
 
 # Define a function to handle voice messages or audio files
 async def recognize(update, context):
@@ -115,7 +93,7 @@ async def recognize(update, context):
                     f"🔎 Title: {title}\n"
                     f"🧑‍🎨 Artist: {artist}\n"
                     f"🎧 Genre: {genre}\n"
-                    f"���A📀📀lbum:  {album}\n\n"
+                    f"Album:  {album}\n\n"
                     # f"Spotify:  {spotify}\n\n"
                     f"You can listen to it on Spotify or YouTube."
                 ),
