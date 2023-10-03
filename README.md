@@ -1,5 +1,5 @@
 # Music Recognition Telegram bot
-This is a Python Telegram that takes voice message and Reconizes it then sends it back to telegram user.
+a Python Telegram that takes voice message and Reconizes it then sends it back to telegram user.
 
 # features
 - Recognizes Musics
