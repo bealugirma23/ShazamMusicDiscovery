@@ -1,6 +1,6 @@
 import logging
 from shazamio import Shazam
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
     ApplicationBuilder,
     filters,
@@ -114,7 +114,7 @@ async def recognize(update, context):
 
 
 # Button OnClick .
-async def queryHandler(update, context):
+async def query_handler(update, context):
     query = update.callback_query.data
     # Answer the callback query.
     await update.callback_query.answer()
@@ -145,7 +145,7 @@ async def queryHandler(update, context):
             logger.error(e)
             await context.bot.send_message(
                 update.effective_message.chat_id,
-                text=("Sorry, i think this music dont have lyrics 😐"),
+                text=("Sorry, i think this music dont have lyricccs 😐"),
             )
     if "three" in query:
         try:
@@ -167,19 +167,20 @@ async def unknown(update, context):
     )
 
 
+
 def main():
     print("Starting the bot...")
     # Create an Updater and attach a Dispatcher to it
     application = (
         ApplicationBuilder()
-        .token("6508856967:AAE0VyOU9fjxCEHrMWHtVsf1du2GoV2cpY8")
+        .token(TOKEN)
         .build()
     )
  
     # Register the command handler
     start_handler = CommandHandler("start", start)
     application.add_handler(start_handler)
-    application.add_handler(CallbackQueryHandler(queryHandler))
+    application.add_handler(CallbackQueryHandler(query_handler))
     application.add_handler(MessageHandler(filters.VOICE | filters.AUDIO, recognize))
     application.add_handler(MessageHandler(filters.COMMAND | filters.TEXT, unknown))
 
