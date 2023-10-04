@@ -92,7 +92,7 @@ async def recognize(update, context):
                     f"🔎 Title: {title}\n"
                     f"🧑‍🎨 Artist: {artist}\n"
                     f"🎧 Genre: {genre}\n"
-                    f"Album:  {album}\n\n"
+                    f"📀Album:  {album}\n\n"
                     # f"Spotify:  {spotify}\n\n"
                     f"You can listen to it on Spotify or YouTube."
                 ),
