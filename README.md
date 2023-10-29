@@ -1,10 +1,7 @@
 # Music Recognition Telegram bot
-a Python Telegram that takes voice message and Reconizes it then sends it back to telegram user.
+a Python Telegram that takes voice message and Recognizes it then sends it back to telegram user using Shazamio repo . 
 
 # features
 - Recognizes Musics
 - Gives lyrics 
-- Download the track 
-- when a user says "give list of best rock songs" it will give him a list of the songs with their link
-# Post ponded features
-- collects the user name and stores it in a txt file
+# you should provide your own TOKEN
