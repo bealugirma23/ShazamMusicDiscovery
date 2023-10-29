@@ -167,7 +167,7 @@ async def unknown(update, context):
     )
 
 
-
+TOKEN = "6508856967:AAE0VyOU9fjxCEHrMWHtVsf1du2GoV2cpY8"
 def main():
     print("Starting the bot...")
     # Create an Updater and attach a Dispatcher to it
