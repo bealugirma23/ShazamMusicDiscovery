@@ -5,3 +5,9 @@ a Python Telegram that takes voice message and Recognizes it then sends it back 
 - Recognizes Musics
 - Gives lyrics 
 # you should provide your own TOKEN
+
+
+# functions
+- search artists
+- search tracks
+-
