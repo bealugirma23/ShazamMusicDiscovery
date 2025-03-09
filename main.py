@@ -1,13 +1,17 @@
+import os
 from telegram.ext import CommandHandler, MessageHandler, CallbackQueryHandler, filters, ApplicationBuilder
-
-from bot.config import TOKEN
+from dotenv import load_dotenv
 from bot.logging_config import setup_logging
 from bot.handlers import start, recognize ,top, help, query_handler, unknown, search
+
+load_dotenv()
 
 def main():
     setup_logging()  # Initialize the logger
     print("Starting the bot...")
-    application = ApplicationBuilder().token(TOKEN).build()
+    token = os.getenv('TOKEN')
+    print(token)
+    application = ApplicationBuilder().token(token).build()
 
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("search", search))
