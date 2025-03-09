@@ -13,7 +13,7 @@ class ShazamService:
         try:
             logger.info(f"Recognizing song from file: {audio_file_path}")
             result = await self.shazam.recognize_song(audio_file_path)
-            logger.info("Song recognition successful.")
+            logger.info(f"Song recognition successful., {result}")
             return result
         except Exception as e:
             logger.error(f"Error recognizing song: {e}")
@@ -40,15 +40,18 @@ class ShazamService:
         try:
             logger.info("Searching")
             tracks = await self.shazam.search_artist(name_query, limit)
-            print(tracks)
+            return tracks 
         except Exception as e:
             logger.error(f"Error recognizing song: {e}")
             return None
     async def get_top_songs(self):
         try:
             tracks = await self.shazam.top_world_tracks(limit=10)
-            print(tracks)
-            return tracks
+            for track in tracks['tracks']:
+                print(track)
+                return track
+            
+            return "No tracks found"
         except Exception as e:
             logger.error(f"Error song: {e}")
             return None

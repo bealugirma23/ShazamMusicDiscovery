@@ -62,7 +62,7 @@ async def recognize(update, context):
     # Get the file object from Telegram
     file = await context.bot.get_file(file_id)
     # Download the file locally
-    await file.download_to_drive("audio.ogg")
+    await file.download_to_drive("./uploads/audio.ogg")
     # Send a message to indicate that the bot is processing the audio
     await context.bot.send_message(
         update.effective_message.chat_id, text=("Processing your audio... 🫡")
@@ -71,7 +71,7 @@ async def recognize(update, context):
     try:
         # Recognize the song using Shazam
 
-        result = await shazam.recognize_song("audio.ogg")
+        result = await shazam.recognize_song("./uploads/audio.ogg")
         print(result)
         # Check if there is a match
         if result:
@@ -115,7 +115,7 @@ async def query_handler(update, context):
     query = update.callback_query.data
     # Answer the callback query.
     await update.callback_query.answer()
-    result = await shazam.recognize_song("audio.ogg")
+    result = await shazam.recognize_song("./uploads/audio.ogg")
     # lyrics = result["track"]["sections"][1]["text"]
     try:
         lyrics = (
