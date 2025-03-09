@@ -266,7 +266,7 @@ async def query_handler(update, context):
                 update.effective_message.chat_id,
                 f"{track['images']['coverart']}",
                 caption=(
-                    f"🔎 Track Id: {track["key"]}\n"
+                    f"🔎 Track Id: {track['key']}\n"
                     f"🔎 Title: {track['title']}\n"
                     f"🧑‍🎨 Artist: {track['subtitle']}\n"
                     # f"🎧 Genre: {track["genres"]["primary"]}\n"
