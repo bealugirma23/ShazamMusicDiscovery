@@ -1,9 +1,10 @@
 import json
-
+from utils import supabase
 from dataclass_factory import Unknown
 from bot.config import FORWARD_LINK
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from services.shazam_service import ShazamService
+from utils import supabaseInit# / Start Command
 import logging
 import os
 import uuid
@@ -16,8 +17,9 @@ def initialize_global(value):
     global song_data 
     song_data = value
 
-# / Start Command
 async def start(update, context):
+    user =  update.message.from_user
+    print("User:", user)
     # Send Welcome message
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
@@ -26,6 +28,15 @@ async def start(update, context):
             "Just send me a voice message or an audio file and I will try to find the song for you."
         ),
     )
+    try:
+       response = await supabaseInit.table("user_analaysis").insert({"first_name": user["first_name"],"language": user["language_code"], "is_bot": user["is_bot"],  "telegram_username": user['username']}).execute()   
+       
+       if response.error:
+           print("error while inserting", response.error)
+       else: 
+           print("inserted")
+    except Exception as e: 
+       print("error inserting ", e)
 
 # Define a function to handle voice messages or audio files
 async def recognize(update, context):
@@ -123,8 +134,34 @@ async def top(update, context):
 async def help(update, context):
     await context.bot.send_message(
         update.effective_message.chat_id,
-        text=("hello welcome to the this bot this bot is completely free you can search ")
+        text=(
+                "Hello! Welcome to our bot. We're glad to have you here. "
+            "This bot is completely free to use, and you can search for various information effortlessly. "
+            "Feel free to explore and let us know how we can assist you further!"
+            )
     )
+async def feedback(update, context):
+    user = update.message.from_user
+    user_message = update.message.text 
+    await context.bot.send_message(
+        update.effective_message.chat_id,
+        text=("Please! write your feedback")
+    )
+    try:
+       response = await supabaseInit.table("feedback").insert({"user_name": user['username'], "message": user_message})
+       if response:
+           if response.error: 
+               print("error while feedback")
+       else:
+           await context.bot.send_message(
+           update.effective_message.chat_id,
+           text=("Thank you for your feedback")
+    )
+           print("feedback sent")
+
+    except Exception as e: 
+     print(e)
+
 async def search(update, context):
     # Ask for the artist name in a more engaging way
     await context.bot.send_message(
@@ -133,27 +170,29 @@ async def search(update, context):
     )
 
     # Wait for the user to send the artist name
-    artist_name = update.message.text
-    print(f"User searched for: {artist_name}")
+    artist_name_response = await context.bot.get_updates() 
+    if artist_name_response.message:
+        artist_name = artist_name_response.message.text
+        print(f"User searched for: {artist_name}")
 
     # Indicate that the bot is processing the request
-    await context.bot.send_message(
-        update.effective_message.chat_id,
-        text=f"🔍 Searching for '{artist_name}'... Hold on!"
-    )
-
-    try:
-        # Search for the artist using Shazam API
-        result = await shazam_service.search_artist(name_query=artist_name, limit=3)
-        print("Shazam API Response:", result)
-
+        await context.bot.send_message(
+            update.effective_message.chat_id,
+            text=f"🔍 Searching for '{artist_name}'... Hold on!"
+        )
+    
+        try:
+            # Search for the artist using Shazam API
+            result = await shazam_service.search_artist(name_query=artist_name, limit=3)
+            print("Shazam API Response:", result)
+    
         # Check if results are found
-        if not result or 'artists' not in result or not result['artists']['hits']:
-            await context.bot.send_message(
-                update.effective_message.chat_id,
-                text=f"😔 Sorry, I couldn't find any artists matching '{artist_name}'. Try another name!"
-            )
-            return
+            if not result or 'artists' not in result or not result['artists']['hits']:
+                await context.bot.send_message(
+                    update.effective_message.chat_id,
+                    text=f"😔 Sorry, I couldn't find any artists matching '{artist_name}'. Try another name!"
+                )
+                return
 
         # Extract artist information
         artists = result['artists']['hits']
